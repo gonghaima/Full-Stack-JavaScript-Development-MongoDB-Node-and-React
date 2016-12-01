@@ -11,6 +11,14 @@ class App extends React.Component {
         pageHeader:'Naming Contests'
     };
 
+    componentDidMount() {
+        
+    }
+    
+    componentWillUnmount() {
+        
+    }
+    
     render() {
         return (
             <div className="App">
