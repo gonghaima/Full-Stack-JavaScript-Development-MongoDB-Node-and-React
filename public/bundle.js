@@ -59,21 +59,58 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var App = function App(props) {
+	// const Header = (message) => {
+	//     return (
+	//         <h2>
+	//             Hello React with JSX COM {message}
+	//         </h2>
+	//     );
+	// };
+	
+	// Header.propTypes = {
+	//     message: React.PropTypes.string.isRequired
+	// };
+	
+	// const App = (props) => {
+	//     return (
+	//         <div>
+	//             <Header message="Naming Contests"/>
+	//             <div>
+	//                 ...**************
+	//      </div>
+	//         </div>
+	//     );
+	// };
+	
+	
+	// ReactDOM.render(
+	//     <App />,
+	//     document.getElementById('root')
+	// );
+	
+	
+	var Header = function Header(_ref) {
+	    var message = _ref.message;
+	
 	    return _react2.default.createElement(
 	        'h2',
-	        null,
-	        'Hello React with JSX COM ',
-	        props.headerMessage
+	        { className: 'Header text-center' },
+	        message
 	    );
 	};
 	
-	App.propTypes = {
-	    headerMessage: _react2.default.PropTypes.string.isRequired
+	Header.propTypes = {
+	    message: _react2.default.PropTypes.string
 	};
-	App.defaultProps = {
-	    headerMessage: "Hello!!"
+	var App = function App() {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'App' },
+	        _react2.default.createElement(Header, { message: 'naming contests' }),
+	        _react2.default.createElement('div', null)
+	    );
 	};
+	
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('root'));
 
 /***/ },
