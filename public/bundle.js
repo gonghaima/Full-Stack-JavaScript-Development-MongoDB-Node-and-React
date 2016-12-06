@@ -23565,6 +23565,8 @@
 	    value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(/*! react */ 1);
@@ -23583,7 +23585,15 @@
 	
 	var _Contest2 = _interopRequireDefault(_Contest);
 	
+	var _api = __webpack_require__(/*! ../api */ 208);
+	
+	var api = _interopRequireWildcard(_api);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -23614,9 +23624,13 @@
 	            contests: _this.props.initialContests
 	        }, _this.fetchContest = function (contestId) {
 	            pushState({ currentContestId: contestId }, '/contest/' + contestId);
-	            _this.setState({
-	                pageHeader: _this.state.contests[contestId].contestName,
-	                currentContestId: contestId
+	
+	            api.fetchContest(contestId).then(function (contest) {
+	                _this.setState({
+	                    pageHeader: contest.contestName,
+	                    currentContestId: contest.id,
+	                    contests: _extends({}, _this.state.contests, _defineProperty({}, contest.id, contest))
+	                });
 	            });
 	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
@@ -23857,7 +23871,7 @@
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "Contest" },
-	                this.props.id
+	                this.props.description
 	            );
 	        }
 	    }]);
@@ -23866,10 +23880,36 @@
 	}(_react.Component);
 	
 	Contest.propTypes = {
-	    id: _react.PropTypes.number.isRequired
+	    description: _react.PropTypes.string.isRequired
 	};
 	
 	exports.default = Contest;
+
+/***/ },
+/* 208 */
+/*!********************!*\
+  !*** ./src/api.js ***!
+  \********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchContest = undefined;
+	
+	var _axios = __webpack_require__(/*! axios */ 178);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var fetchContest = exports.fetchContest = function fetchContest(contestId) {
+	    return _axios2.default.get('/api/contests/' + contestId).then(function (resp) {
+	        return resp.data;
+	    });
+	};
 
 /***/ }
 /******/ ]);
