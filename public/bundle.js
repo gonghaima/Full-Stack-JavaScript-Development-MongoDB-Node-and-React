@@ -57,19 +57,13 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _axios = __webpack_require__(/*! axios */ 178);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _App = __webpack_require__(/*! ./components/App */ 203);
+	var _App = __webpack_require__(/*! ./components/App */ 178);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_axios2.default.get('/api/contests').then(function (resp) {
-	    _reactDom2.default.render(_react2.default.createElement(_App2.default, { initialContests: window.initialData.contests }), document.getElementById('root'));
-	}).catch(console.error);
+	_reactDom2.default.render(_react2.default.createElement(_App2.default, { initialData: window.initialData }), document.getElementById('root'));
 
 /***/ },
 /* 1 */
@@ -22053,6 +22047,377 @@
 
 /***/ },
 /* 178 */
+/*!*******************************!*\
+  !*** ./src/components/App.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Header = __webpack_require__(/*! ./Header */ 179);
+	
+	var _Header2 = _interopRequireDefault(_Header);
+	
+	var _ContestList = __webpack_require__(/*! ./ContestList */ 180);
+	
+	var _ContestList2 = _interopRequireDefault(_ContestList);
+	
+	var _Contest = __webpack_require__(/*! ./Contest */ 182);
+	
+	var _Contest2 = _interopRequireDefault(_Contest);
+	
+	var _api = __webpack_require__(/*! ../api */ 183);
+	
+	var api = _interopRequireWildcard(_api);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var pushState = function pushState(obj, url) {
+	    return window.history.pushState(obj, '', url);
+	};
+	
+	var App = function (_React$Component) {
+	    _inherits(App, _React$Component);
+	
+	    function App() {
+	        var _ref;
+	
+	        var _temp, _this, _ret;
+	
+	        _classCallCheck(this, App);
+	
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+	
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = _this.props.initialData, _this.fetchContest = function (contestId) {
+	            pushState({ currentContestId: contestId }, '/contest/' + contestId);
+	
+	            api.fetchContest(contestId).then(function (contest) {
+	                _this.setState({
+	                    currentContestId: contest.id,
+	                    contests: _extends({}, _this.state.contests, _defineProperty({}, contest.id, contest))
+	                });
+	            });
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
+	    }
+	
+	    _createClass(App, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {}
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: 'currentContest',
+	        value: function currentContest() {
+	            return this.state.contests[this.state.currentContestId];
+	        }
+	    }, {
+	        key: 'pageHeader',
+	        value: function pageHeader() {
+	            if (this.state.currentContestId) {
+	                return this.currentContest().contestName;
+	            }
+	            return 'Naming Contests';
+	        }
+	    }, {
+	        key: 'currentContent',
+	        value: function currentContent() {
+	            if (this.state.currentContestId) {
+	                return _react2.default.createElement(_Contest2.default, this.currentContest());
+	            }
+	            return _react2.default.createElement(_ContestList2.default, {
+	                onContestClick: this.fetchContest,
+	                contests: this.state.contests });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'App' },
+	                _react2.default.createElement(_Header2.default, { message: this.pageHeader() }),
+	                this.currentContent()
+	            );
+	        }
+	    }]);
+	
+	    return App;
+	}(_react2.default.Component);
+	
+	App.propTypes = {
+	    initialData: _react2.default.PropTypes.object.isRequired
+	};
+	exports.default = App;
+
+/***/ },
+/* 179 */
+/*!**********************************!*\
+  !*** ./src/components/Header.js ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 32);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Header = function Header(_ref) {
+	    var message = _ref.message;
+	
+	    return _react2.default.createElement(
+	        'h2',
+	        { className: 'Header text-center' },
+	        message
+	    );
+	};
+	
+	Header.propTypes = {
+	    message: _react2.default.PropTypes.string
+	};
+	
+	exports.default = Header;
+
+/***/ },
+/* 180 */
+/*!***************************************!*\
+  !*** ./src/components/ContestList.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _ContestPreview = __webpack_require__(/*! ./ContestPreview */ 181);
+	
+	var _ContestPreview2 = _interopRequireDefault(_ContestPreview);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ContestList = function ContestList(_ref) {
+	    var contests = _ref.contests,
+	        onContestClick = _ref.onContestClick;
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'ContestList' },
+	        Object.keys(contests).map(function (contestId) {
+	            return _react2.default.createElement(_ContestPreview2.default, _extends({
+	                key: contestId,
+	                onClick: onContestClick
+	            }, contests[contestId]));
+	        })
+	    );
+	};
+	
+	ContestList.propTypes = {
+	    contests: _react2.default.PropTypes.object,
+	    onContestClick: _react2.default.PropTypes.func.isRequired
+	};
+	
+	exports.default = ContestList;
+
+/***/ },
+/* 181 */
+/*!******************************************!*\
+  !*** ./src/components/ContestPreview.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ContestPreview = function (_Component) {
+	    _inherits(ContestPreview, _Component);
+	
+	    function ContestPreview(props) {
+	        _classCallCheck(this, ContestPreview);
+	
+	        var _this = _possibleConstructorReturn(this, (ContestPreview.__proto__ || Object.getPrototypeOf(ContestPreview)).call(this, props));
+	
+	        _this.handleClick = function () {
+	            _this.props.onClick(_this.props.id);
+	        };
+	
+	        return _this;
+	    }
+	
+	    _createClass(ContestPreview, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "link ContestPreview", onClick: this.handleClick },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "category-name" },
+	                    this.props.categoryName
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "contest-name" },
+	                    this.props.contestName
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return ContestPreview;
+	}(_react.Component);
+	
+	ContestPreview.propTypes = {
+	    id: _react2.default.PropTypes.number.isRequired,
+	    categoryName: _react2.default.PropTypes.string.isRequired,
+	    contestName: _react2.default.PropTypes.string.isRequired,
+	    onClick: _react2.default.PropTypes.func.isRequired
+	};
+	
+	exports.default = ContestPreview;
+
+/***/ },
+/* 182 */
+/*!***********************************!*\
+  !*** ./src/components/Contest.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Contest = function (_Component) {
+	    _inherits(Contest, _Component);
+	
+	    function Contest() {
+	        _classCallCheck(this, Contest);
+	
+	        return _possibleConstructorReturn(this, (Contest.__proto__ || Object.getPrototypeOf(Contest)).apply(this, arguments));
+	    }
+	
+	    _createClass(Contest, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "Contest" },
+	                this.props.description
+	            );
+	        }
+	    }]);
+	
+	    return Contest;
+	}(_react.Component);
+	
+	Contest.propTypes = {
+	    description: _react.PropTypes.string.isRequired
+	};
+	
+	exports.default = Contest;
+
+/***/ },
+/* 183 */
+/*!********************!*\
+  !*** ./src/api.js ***!
+  \********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchContest = undefined;
+	
+	var _axios = __webpack_require__(/*! axios */ 184);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var fetchContest = exports.fetchContest = function fetchContest(contestId) {
+	    return _axios2.default.get('/api/contests/' + contestId).then(function (resp) {
+	        return resp.data;
+	    });
+	};
+
+/***/ },
+/* 184 */
 /*!**************************!*\
   !*** ./~/axios/index.js ***!
   \**************************/
@@ -22060,10 +22425,10 @@
 
 	'use strict';
 	
-	module.exports = __webpack_require__(/*! ./lib/axios */ 179);
+	module.exports = __webpack_require__(/*! ./lib/axios */ 185);
 
 /***/ },
-/* 179 */
+/* 185 */
 /*!******************************!*\
   !*** ./~/axios/lib/axios.js ***!
   \******************************/
@@ -22071,10 +22436,10 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./utils */ 180);
-	var bind = __webpack_require__(/*! ./helpers/bind */ 181);
-	var Axios = __webpack_require__(/*! ./core/Axios */ 182);
-	var defaults = __webpack_require__(/*! ./defaults */ 183);
+	var utils = __webpack_require__(/*! ./utils */ 186);
+	var bind = __webpack_require__(/*! ./helpers/bind */ 187);
+	var Axios = __webpack_require__(/*! ./core/Axios */ 188);
+	var defaults = __webpack_require__(/*! ./defaults */ 189);
 	
 	/**
 	 * Create an instance of Axios
@@ -22107,15 +22472,15 @@
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ 200);
-	axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ 201);
-	axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ 197);
+	axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ 206);
+	axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ 207);
+	axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ 203);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(/*! ./helpers/spread */ 202);
+	axios.spread = __webpack_require__(/*! ./helpers/spread */ 208);
 	
 	module.exports = axios;
 	
@@ -22123,7 +22488,7 @@
 	module.exports.default = axios;
 
 /***/ },
-/* 180 */
+/* 186 */
 /*!******************************!*\
   !*** ./~/axios/lib/utils.js ***!
   \******************************/
@@ -22133,7 +22498,7 @@
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var bind = __webpack_require__(/*! ./helpers/bind */ 181);
+	var bind = __webpack_require__(/*! ./helpers/bind */ 187);
 	
 	/*global toString:true*/
 	
@@ -22428,7 +22793,7 @@
 	};
 
 /***/ },
-/* 181 */
+/* 187 */
 /*!*************************************!*\
   !*** ./~/axios/lib/helpers/bind.js ***!
   \*************************************/
@@ -22447,7 +22812,7 @@
 	};
 
 /***/ },
-/* 182 */
+/* 188 */
 /*!***********************************!*\
   !*** ./~/axios/lib/core/Axios.js ***!
   \***********************************/
@@ -22455,12 +22820,12 @@
 
 	'use strict';
 	
-	var defaults = __webpack_require__(/*! ./../defaults */ 183);
-	var utils = __webpack_require__(/*! ./../utils */ 180);
-	var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ 194);
-	var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ 195);
-	var isAbsoluteURL = __webpack_require__(/*! ./../helpers/isAbsoluteURL */ 198);
-	var combineURLs = __webpack_require__(/*! ./../helpers/combineURLs */ 199);
+	var defaults = __webpack_require__(/*! ./../defaults */ 189);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
+	var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ 200);
+	var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ 201);
+	var isAbsoluteURL = __webpack_require__(/*! ./../helpers/isAbsoluteURL */ 204);
+	var combineURLs = __webpack_require__(/*! ./../helpers/combineURLs */ 205);
 	
 	/**
 	 * Create a new instance of Axios
@@ -22540,7 +22905,7 @@
 	module.exports = Axios;
 
 /***/ },
-/* 183 */
+/* 189 */
 /*!*********************************!*\
   !*** ./~/axios/lib/defaults.js ***!
   \*********************************/
@@ -22548,8 +22913,8 @@
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(/*! ./utils */ 180);
-	var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ 184);
+	var utils = __webpack_require__(/*! ./utils */ 186);
+	var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ 190);
 	
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -22566,10 +22931,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(/*! ./adapters/xhr */ 185);
+	    adapter = __webpack_require__(/*! ./adapters/xhr */ 191);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(/*! ./adapters/http */ 185);
+	    adapter = __webpack_require__(/*! ./adapters/http */ 191);
 	  }
 	  return adapter;
 	}
@@ -22637,7 +23002,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 3)))
 
 /***/ },
-/* 184 */
+/* 190 */
 /*!****************************************************!*\
   !*** ./~/axios/lib/helpers/normalizeHeaderName.js ***!
   \****************************************************/
@@ -22645,7 +23010,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ../utils */ 180);
+	var utils = __webpack_require__(/*! ../utils */ 186);
 	
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -22657,7 +23022,7 @@
 	};
 
 /***/ },
-/* 185 */
+/* 191 */
 /*!*************************************!*\
   !*** ./~/axios/lib/adapters/xhr.js ***!
   \*************************************/
@@ -22665,13 +23030,13 @@
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
-	var settle = __webpack_require__(/*! ./../core/settle */ 186);
-	var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ 189);
-	var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ 190);
-	var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ 191);
-	var createError = __webpack_require__(/*! ../core/createError */ 187);
-	var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(/*! ./../helpers/btoa */ 192);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
+	var settle = __webpack_require__(/*! ./../core/settle */ 192);
+	var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ 195);
+	var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ 196);
+	var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ 197);
+	var createError = __webpack_require__(/*! ../core/createError */ 193);
+	var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(/*! ./../helpers/btoa */ 198);
 	
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -22764,7 +23129,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(/*! ./../helpers/cookies */ 193);
+	      var cookies = __webpack_require__(/*! ./../helpers/cookies */ 199);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
@@ -22838,7 +23203,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 3)))
 
 /***/ },
-/* 186 */
+/* 192 */
 /*!************************************!*\
   !*** ./~/axios/lib/core/settle.js ***!
   \************************************/
@@ -22846,7 +23211,7 @@
 
 	'use strict';
 	
-	var createError = __webpack_require__(/*! ./createError */ 187);
+	var createError = __webpack_require__(/*! ./createError */ 193);
 	
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -22866,7 +23231,7 @@
 	};
 
 /***/ },
-/* 187 */
+/* 193 */
 /*!*****************************************!*\
   !*** ./~/axios/lib/core/createError.js ***!
   \*****************************************/
@@ -22874,7 +23239,7 @@
 
 	'use strict';
 	
-	var enhanceError = __webpack_require__(/*! ./enhanceError */ 188);
+	var enhanceError = __webpack_require__(/*! ./enhanceError */ 194);
 	
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -22891,7 +23256,7 @@
 	};
 
 /***/ },
-/* 188 */
+/* 194 */
 /*!******************************************!*\
   !*** ./~/axios/lib/core/enhanceError.js ***!
   \******************************************/
@@ -22919,7 +23284,7 @@
 	};
 
 /***/ },
-/* 189 */
+/* 195 */
 /*!*****************************************!*\
   !*** ./~/axios/lib/helpers/buildURL.js ***!
   \*****************************************/
@@ -22927,7 +23292,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
 	
 	function encode(val) {
 	  return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
@@ -22988,7 +23353,7 @@
 	};
 
 /***/ },
-/* 190 */
+/* 196 */
 /*!*********************************************!*\
   !*** ./~/axios/lib/helpers/parseHeaders.js ***!
   \*********************************************/
@@ -22996,7 +23361,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
 	
 	/**
 	 * Parse headers into an object
@@ -23035,7 +23400,7 @@
 	};
 
 /***/ },
-/* 191 */
+/* 197 */
 /*!************************************************!*\
   !*** ./~/axios/lib/helpers/isURLSameOrigin.js ***!
   \************************************************/
@@ -23043,7 +23408,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
 	
 	module.exports = utils.isStandardBrowserEnv() ?
 	
@@ -23106,7 +23471,7 @@
 	}();
 
 /***/ },
-/* 192 */
+/* 198 */
 /*!*************************************!*\
   !*** ./~/axios/lib/helpers/btoa.js ***!
   \*************************************/
@@ -23149,7 +23514,7 @@
 	module.exports = btoa;
 
 /***/ },
-/* 193 */
+/* 199 */
 /*!****************************************!*\
   !*** ./~/axios/lib/helpers/cookies.js ***!
   \****************************************/
@@ -23157,7 +23522,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
 	
 	module.exports = utils.isStandardBrowserEnv() ?
 	
@@ -23210,7 +23575,7 @@
 	}();
 
 /***/ },
-/* 194 */
+/* 200 */
 /*!************************************************!*\
   !*** ./~/axios/lib/core/InterceptorManager.js ***!
   \************************************************/
@@ -23218,7 +23583,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
 	
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -23270,7 +23635,7 @@
 	module.exports = InterceptorManager;
 
 /***/ },
-/* 195 */
+/* 201 */
 /*!*********************************************!*\
   !*** ./~/axios/lib/core/dispatchRequest.js ***!
   \*********************************************/
@@ -23278,10 +23643,10 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
-	var transformData = __webpack_require__(/*! ./transformData */ 196);
-	var isCancel = __webpack_require__(/*! ../cancel/isCancel */ 197);
-	var defaults = __webpack_require__(/*! ../defaults */ 183);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
+	var transformData = __webpack_require__(/*! ./transformData */ 202);
+	var isCancel = __webpack_require__(/*! ../cancel/isCancel */ 203);
+	var defaults = __webpack_require__(/*! ../defaults */ 189);
 	
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -23338,7 +23703,7 @@
 	};
 
 /***/ },
-/* 196 */
+/* 202 */
 /*!*******************************************!*\
   !*** ./~/axios/lib/core/transformData.js ***!
   \*******************************************/
@@ -23346,7 +23711,7 @@
 
 	'use strict';
 	
-	var utils = __webpack_require__(/*! ./../utils */ 180);
+	var utils = __webpack_require__(/*! ./../utils */ 186);
 	
 	/**
 	 * Transform the data for a request or a response
@@ -23366,7 +23731,7 @@
 	};
 
 /***/ },
-/* 197 */
+/* 203 */
 /*!****************************************!*\
   !*** ./~/axios/lib/cancel/isCancel.js ***!
   \****************************************/
@@ -23379,7 +23744,7 @@
 	};
 
 /***/ },
-/* 198 */
+/* 204 */
 /*!**********************************************!*\
   !*** ./~/axios/lib/helpers/isAbsoluteURL.js ***!
   \**********************************************/
@@ -23403,7 +23768,7 @@
 	};
 
 /***/ },
-/* 199 */
+/* 205 */
 /*!********************************************!*\
   !*** ./~/axios/lib/helpers/combineURLs.js ***!
   \********************************************/
@@ -23424,7 +23789,7 @@
 	};
 
 /***/ },
-/* 200 */
+/* 206 */
 /*!**************************************!*\
   !*** ./~/axios/lib/cancel/Cancel.js ***!
   \**************************************/
@@ -23452,7 +23817,7 @@
 	module.exports = Cancel;
 
 /***/ },
-/* 201 */
+/* 207 */
 /*!*******************************************!*\
   !*** ./~/axios/lib/cancel/CancelToken.js ***!
   \*******************************************/
@@ -23460,7 +23825,7 @@
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(/*! ./Cancel */ 200);
+	var Cancel = __webpack_require__(/*! ./Cancel */ 206);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -23517,7 +23882,7 @@
 	module.exports = CancelToken;
 
 /***/ },
-/* 202 */
+/* 208 */
 /*!***************************************!*\
   !*** ./~/axios/lib/helpers/spread.js ***!
   \***************************************/
@@ -23550,365 +23915,6 @@
 	  return function wrap(arr) {
 	    return callback.apply(null, arr);
 	  };
-	};
-
-/***/ },
-/* 203 */
-/*!*******************************!*\
-  !*** ./src/components/App.js ***!
-  \*******************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Header = __webpack_require__(/*! ./Header */ 204);
-	
-	var _Header2 = _interopRequireDefault(_Header);
-	
-	var _ContestList = __webpack_require__(/*! ./ContestList */ 205);
-	
-	var _ContestList2 = _interopRequireDefault(_ContestList);
-	
-	var _Contest = __webpack_require__(/*! ./Contest */ 207);
-	
-	var _Contest2 = _interopRequireDefault(_Contest);
-	
-	var _api = __webpack_require__(/*! ../api */ 208);
-	
-	var api = _interopRequireWildcard(_api);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var pushState = function pushState(obj, url) {
-	    return window.history.pushState(obj, '', url);
-	};
-	
-	var App = function (_React$Component) {
-	    _inherits(App, _React$Component);
-	
-	    function App() {
-	        var _ref;
-	
-	        var _temp, _this, _ret;
-	
-	        _classCallCheck(this, App);
-	
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
-	        }
-	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	            pageHeader: 'Naming Contests',
-	            contests: _this.props.initialContests
-	        }, _this.fetchContest = function (contestId) {
-	            pushState({ currentContestId: contestId }, '/contest/' + contestId);
-	
-	            api.fetchContest(contestId).then(function (contest) {
-	                _this.setState({
-	                    pageHeader: contest.contestName,
-	                    currentContestId: contest.id,
-	                    contests: _extends({}, _this.state.contests, _defineProperty({}, contest.id, contest))
-	                });
-	            });
-	        }, _temp), _possibleConstructorReturn(_this, _ret);
-	    }
-	
-	    _createClass(App, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {}
-	    }, {
-	        key: 'componentWillUnmount',
-	        value: function componentWillUnmount() {}
-	    }, {
-	        key: 'currentContent',
-	        value: function currentContent() {
-	            if (this.state.currentContestId) {
-	                return _react2.default.createElement(_Contest2.default, this.state.contests[this.state.currentContestId]);
-	            }
-	            return _react2.default.createElement(_ContestList2.default, {
-	                onContestClick: this.fetchContest,
-	                contests: this.state.contests });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'App' },
-	                _react2.default.createElement(_Header2.default, { message: this.state.pageHeader }),
-	                this.currentContent()
-	            );
-	        }
-	    }]);
-	
-	    return App;
-	}(_react2.default.Component);
-	
-	exports.default = App;
-
-/***/ },
-/* 204 */
-/*!**********************************!*\
-  !*** ./src/components/Header.js ***!
-  \**********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 32);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Header = function Header(_ref) {
-	    var message = _ref.message;
-	
-	    return _react2.default.createElement(
-	        'h2',
-	        { className: 'Header text-center' },
-	        message
-	    );
-	};
-	
-	Header.propTypes = {
-	    message: _react2.default.PropTypes.string
-	};
-	
-	exports.default = Header;
-
-/***/ },
-/* 205 */
-/*!***************************************!*\
-  !*** ./src/components/ContestList.js ***!
-  \***************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _ContestPreview = __webpack_require__(/*! ./ContestPreview */ 206);
-	
-	var _ContestPreview2 = _interopRequireDefault(_ContestPreview);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ContestList = function ContestList(_ref) {
-	    var contests = _ref.contests,
-	        onContestClick = _ref.onContestClick;
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'ContestList' },
-	        Object.keys(contests).map(function (contestId) {
-	            return _react2.default.createElement(_ContestPreview2.default, _extends({
-	                key: contestId,
-	                onClick: onContestClick
-	            }, contests[contestId]));
-	        })
-	    );
-	};
-	
-	ContestList.propTypes = {
-	    contests: _react2.default.PropTypes.object,
-	    onContestClick: _react2.default.PropTypes.func.isRequired
-	};
-	
-	exports.default = ContestList;
-
-/***/ },
-/* 206 */
-/*!******************************************!*\
-  !*** ./src/components/ContestPreview.js ***!
-  \******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var ContestPreview = function (_Component) {
-	    _inherits(ContestPreview, _Component);
-	
-	    function ContestPreview(props) {
-	        _classCallCheck(this, ContestPreview);
-	
-	        var _this = _possibleConstructorReturn(this, (ContestPreview.__proto__ || Object.getPrototypeOf(ContestPreview)).call(this, props));
-	
-	        _this.handleClick = function () {
-	            _this.props.onClick(_this.props.id);
-	        };
-	
-	        return _this;
-	    }
-	
-	    _createClass(ContestPreview, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "div",
-	                { className: "link ContestPreview", onClick: this.handleClick },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "category-name" },
-	                    this.props.categoryName
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "contest-name" },
-	                    this.props.contestName
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return ContestPreview;
-	}(_react.Component);
-	
-	ContestPreview.propTypes = {
-	    id: _react2.default.PropTypes.number.isRequired,
-	    categoryName: _react2.default.PropTypes.string.isRequired,
-	    contestName: _react2.default.PropTypes.string.isRequired,
-	    onClick: _react2.default.PropTypes.func.isRequired
-	};
-	
-	exports.default = ContestPreview;
-
-/***/ },
-/* 207 */
-/*!***********************************!*\
-  !*** ./src/components/Contest.js ***!
-  \***********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Contest = function (_Component) {
-	    _inherits(Contest, _Component);
-	
-	    function Contest() {
-	        _classCallCheck(this, Contest);
-	
-	        return _possibleConstructorReturn(this, (Contest.__proto__ || Object.getPrototypeOf(Contest)).apply(this, arguments));
-	    }
-	
-	    _createClass(Contest, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "div",
-	                { className: "Contest" },
-	                this.props.description
-	            );
-	        }
-	    }]);
-	
-	    return Contest;
-	}(_react.Component);
-	
-	Contest.propTypes = {
-	    description: _react.PropTypes.string.isRequired
-	};
-	
-	exports.default = Contest;
-
-/***/ },
-/* 208 */
-/*!********************!*\
-  !*** ./src/api.js ***!
-  \********************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.fetchContest = undefined;
-	
-	var _axios = __webpack_require__(/*! axios */ 178);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var fetchContest = exports.fetchContest = function fetchContest(contestId) {
-	    return _axios2.default.get('/api/contests/' + contestId).then(function (resp) {
-	        return resp.data;
-	    });
 	};
 
 /***/ }
