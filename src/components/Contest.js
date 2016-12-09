@@ -18,7 +18,7 @@ class Contest extends Component {
 
 Contest.propTypes = {
     description: PropTypes.string.isRequired,
-    contestsListClick:PropTypes.func.isRequired
+    contestListClick:PropTypes.func.isRequired
 };
 
 export default Contest;
