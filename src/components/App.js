@@ -44,7 +44,7 @@ class App extends React.Component {
                 [contest._id]:contest
                 }
             });
-        });
+});
     };
 
 fetchContestList = () => {
@@ -61,11 +61,11 @@ fetchContestList = () => {
     });
 };
 
-fetchNames =(nameIds)=>{
-    if(nameIds.length===0){
+fetchNames = (nameIds) => {
+    if (nameIds.length === 0) {
         return;
     }
-    api.fetchNames(nameIds).then(names=>{
+    api.fetchNames(nameIds).then(names => {
         this.setState({
             names
         });
@@ -83,13 +83,29 @@ pageHeader(){
     return 'Naming Contests';
 }
 
-lookupName=(nameId)=>{
-    if(!this.state.names || !this.state.names[nameId]){
+lookupName = (nameId) => {
+    if (!this.state.names || !this.state.names[nameId]) {
         return {
-            name:'...'
+            name: '...'
         };
     }
     return this.state.names[nameId];
+};
+
+addName = (newName, contestId) => {
+    api.addName(newName, contestId).then(resp =>
+        this.setState({
+            contests:{
+                ...this.state.contests,
+                [resp.updatedContest._id]:resp.updatedContest
+            },
+            names:{
+             ...this.state.names,   
+             [resp.newName._id]: resp.newName
+            }
+        })
+    )
+        .catch(console.error);
 };
 
 currentContent() {
@@ -98,6 +114,7 @@ currentContent() {
             contestListClick={this.fetchContestList}
             fetchNames={this.fetchNames}
             lookupName={this.lookupName}
+            addName={this.addName}
             {...this.currentContest() } />
     }
     return <ContestList
